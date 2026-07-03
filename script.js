@@ -1,21 +1,28 @@
 const input = document.getElementById("userInput");
 const output = document.getElementById("output");
 const fontSelect = document.getElementById("fontSelect");
+const fontSize = document.getElementById("fontSize");
+const inkColor = document.getElementById("inkColor");
 const imageInput = document.getElementById("handwritingImage");
 const previewImage = document.getElementById("previewImage");
 
-// Default Font
+// Default Settings
 output.style.fontFamily = fontSelect.value;
+output.style.fontSize = fontSize.value + "px";
+output.style.color = inkColor.value;
 
 // Live Preview
-input.addEventListener("input", function () {
+function updatePreview() {
     output.innerText = input.value;
-});
+    output.style.fontFamily = fontSelect.value;
+    output.style.fontSize = fontSize.value + "px";
+    output.style.color = inkColor.value;
+}
 
-// Change Font
-fontSelect.addEventListener("change", function () {
-    output.style.fontFamily = this.value;
-});
+input.addEventListener("input", updatePreview);
+fontSelect.addEventListener("change", updatePreview);
+fontSize.addEventListener("input", updatePreview);
+inkColor.addEventListener("input", updatePreview);
 
 // Image Preview
 imageInput.addEventListener("change", function () {
@@ -53,3 +60,6 @@ function downloadLetter() {
     });
 
 }
+
+// Initial Preview
+updatePreview();
