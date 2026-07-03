@@ -6,7 +6,7 @@
 
 <title>HandScript AI</title>
 
-<link rel="stylesheet" href="script.css">
+<link rel="stylesheet" href="style.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Pacifico&family=Caveat:wght@700&family=Indie+Flower&family=Shadows+Into+Light&family=Satisfy&family=Kalam:wght@700&family=Handlee&family=Patrick+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
 
@@ -20,35 +20,35 @@
 
 <h1>HandScript AI</h1>
 
-<textarea id="userInput" placeholder="Type your text here..."></textarea>
+<h3>Customize Handwriting</h3>
 
-<h3>Select Handwriting Font</h3>
-  
+<label><b>Font Family:</b></label>
 <select id="fontSelect">
-
 <option value="'Dancing Script', cursive">Dancing Script</option>
-
 <option value="'Pacifico', cursive">Pacifico</option>
-
 <option value="'Caveat', cursive">Caveat</option>
-
 <option value="'Indie Flower', cursive">Indie Flower</option>
-
 <option value="'Shadows Into Light', cursive">Shadows Into Light</option>
-
 <option value="'Satisfy', cursive">Satisfy</option>
-
 <option value="'Kalam', cursive">Kalam</option>
-
 <option value="'Handlee', cursive">Handlee</option>
-
 <option value="'Patrick Hand', cursive">Patrick Hand</option>
-
 <option value="'Architects Daughter', cursive">Architects Daughter</option>
-
 </select>
 
 <br><br>
+
+<label><b>Font Size:</b></label>
+<input type="range" id="fontSize" min="18" max="60" value="28">
+
+<br><br>
+
+<label><b>Ink Color:</b></label>
+<input type="color" id="inkColor" value="#2c3e50">
+
+<br><br>
+
+<textarea id="userInput" placeholder="Type your text here..."></textarea>
 
 <h3>Upload Handwriting Image</h3>
 
@@ -56,7 +56,7 @@
 
 <img id="previewImage">
 
-<br>
+<br><br>
 
 <button onclick="downloadLetter()">
 Download as Image
