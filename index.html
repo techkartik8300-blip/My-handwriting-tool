@@ -4,13 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>HandScript AI</title>
+<title>HandScript AI v2</title>
 
 <link rel="stylesheet" href="script.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Pacifico&family=Caveat:wght@700&family=Indie+Flower&family=Shadows+Into+Light&family=Satisfy&family=Kalam:wght@700&family=Handlee&family=Patrick+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Pacifico&family=Caveat:wght@400;700&family=Indie+Flower&family=Shadows+Into+Light&family=Satisfy&family=Kalam:wght@300;400;700&family=Handlee&family=Patrick+Hand&family=Architects+Daughter&family=Mukta:wght@400;700&family=Hind:wght@400;700&display=swap" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
 
@@ -18,11 +20,13 @@
 
 <div class="container">
 
-<h1>HandScript AI</h1>
+<h1>✍️ HandScript AI v2</h1>
+
+<p>Create beautiful handwritten notes with live preview.</p>
 
 <h3>Customize Handwriting</h3>
 
-<label><b>Font Family:</b></label>
+<label>Font Family</label>
 <select id="fontSelect">
 <option value="'Dancing Script', cursive">Dancing Script</option>
 <option value="'Pacifico', cursive">Pacifico</option>
@@ -34,65 +38,235 @@
 <option value="'Handlee', cursive">Handlee</option>
 <option value="'Patrick Hand', cursive">Patrick Hand</option>
 <option value="'Architects Daughter', cursive">Architects Daughter</option>
+<option value="'Mukta', sans-serif">Mukta (Hindi)</option>
+<option value="'Hind', sans-serif">Hind (Hindi)</option>
 </select>
 
 <br><br>
 
-<label><b>Font Size:</b></label>
+<label>Font Size</label>
 <select id="fontSize">
-<option value="12">12 px</option>
-<option value="14">14 px</option>
-<option value="16">16 px</option>
-<option value="18">18 px</option>
-<option value="20">20 px</option>
-<option value="22">22 px</option>
-<option value="24">24 px</option>
-<option value="26">26 px</option>
-<option value="28" selected>28 px</option>
-<option value="30">30 px</option>
-<option value="32">32 px</option>
-<option value="36">36 px</option>
-<option value="40">40 px</option>
-<option value="48">48 px</option>
-<option value="60">60 px</option>
+<option>12</option>
+<option>14</option>
+<option>16</option>
+<option>18</option>
+<option>20</option>
+<option>22</option>
+<option>24</option>
+<option>26</option>
+<option selected>28</option>
+<option>30</option>
+<option>32</option>
+<option>36</option>
+<option>40</option>
+<option>48</option>
+<option>60</option>
+<option>72</option>
+<option>96</option>
 </select>
 
 <br><br>
 
-<label><b>Text Style:</b></label>
+<label>Text Style</label>
+
 <select id="fontWeight">
-<option value="normal" selected>Normal</option>
+<option value="normal">Normal</option>
 <option value="bold">Bold</option>
 </select>
 
+<select id="fontStyle">
+<option value="normal">Regular</option>
+<option value="italic">Italic</option>
+</select>
+
+<select id="textDecoration">
+<option value="none">None</option>
+<option value="underline">Underline</option>
+</select>
+
 <br><br>
 
-<label><b>Ink Color:</b></label>
-<input type="color" id="inkColor" value="#2c3e50">
+<label>Ink Color</label>
+<input type="color" id="inkColor" value="#1f2937">
 
 <br><br>
 
-<textarea id="userInput" placeholder="Type your text here..."></textarea>
+<label>Text Alignment</label>
 
-<h3>Upload Handwriting Image</h3>
+<select id="textAlign">
+<option value="left">Left</option>
+<option value="center">Center</option>
+<option value="right">Right</option>
+<option value="justify">Justify</option>
+</select>
+
+<br><br>
+
+<label>Line Spacing</label>
+
+<select id="lineHeight">
+<option value="1.2">1.2</option>
+<option value="1.5" selected>1.5</option>
+<option value="1.8">1.8</option>
+<option value="2">2.0</option>
+<option value="2.5">2.5</option>
+</select>
+
+<br><br>
+
+<label>Paper Type</label>
+
+<select id="paperType">
+<option value="plain">Plain White</option>
+<option value="ruled">Ruled Notebook</option>
+<option value="yellow">Yellow Paper</option>
+<option value="graph">Graph Paper</option>
+</select>
+
+<br><br>
+
+<label>Upload Handwriting Image</label>
 
 <input type="file" id="handwritingImage" accept="image/*">
 
-<img id="previewImage">
+<img id="previewImage" style="display:none;max-width:220px;margin-top:10px;">
+
+<h3>Type Your Text</h3>
+
+<textarea id="userInput" placeholder="Type your text here..."></textarea>
+
+<div class="counter-box">
+    <span>Words: <span id="wordCount">0</span></span>
+    &nbsp;&nbsp;&nbsp;
+    <span>Characters: <span id="charCount">0</span></span>
+</div>
+
+<br>
+
+<div class="button-group">
+
+<button id="copyBtn">
+📋 Copy Text
+</button>
+
+<button id="clearBtn">
+🗑️ Clear
+</button>
+
+<button onclick="downloadLetter()">
+📥 Download PNG
+</button>
+
+<button onclick="downloadPDF()">
+📄 Download PDF
+</button>
+
+<button id="resetBtn">
+🔄 Reset
+</button>
+
+</div>
+
+<br>
+
+<h3>A4 Preview</h3>
+
+<div id="paper">
+
+<div id="output"></div>
+
+</div>
+
+<br>
+
+<div class="zoom-box">
+
+<label>Zoom</label>
+
+<input type="range"
+id="zoomRange"
+min="50"
+max="200"
+value="100">
+
+<span id="zoomValue">100%</span>
+
+</div>
+
+<br>
+
+<h3>Background Paper</h3>
+
+<select id="paperBackground">
+
+<option value="white">
+White Paper
+</option>
+
+<option value="ruled">
+Ruled Notebook
+</option>
+
+<option value="yellow">
+Yellow Paper
+</option>
+
+<option value="graph">
+Graph Paper
+</option>
+
+<option value="dark">
+Dark Paper
+</option>
+
+</select>
 
 <br><br>
 
-<button onclick="downloadLetter()">
-Download as Image
-</button>
+<label>Upload Custom Paper</label>
 
-<h3>Preview</h3>
+<input
+type="file"
+id="paperImage"
+accept="image/*">
 
-<div id="output"></div>
+<img
+id="paperPreview"
+style="display:none;max-width:250px;margin-top:10px;">
+
+<br>
+
+<div class="tools-footer">
+
+<label class="switch">
+<input type="checkbox" id="darkMode">
+<span class="slider"></span>
+</label>
+
+<span>🌙 Dark Mode</span>
+
+<br><br>
+
+<p id="status">
+Ready...
+</p>
+
+<hr>
+
+<p>
+<b>HandScript AI v2</b><br>
+Create beautiful handwritten notes with live preview.
+</p>
+
+<p>
+Made with ❤️ using HTML, CSS & JavaScript
+</p>
+
+</div>
 
 </div>
 
 <script src="script.js"></script>
 
 </body>
-</html>
+  </html>
